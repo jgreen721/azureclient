@@ -1,10 +1,26 @@
 import { useState,useEffect } from 'react'
+import {Canvas} from "@react-three/fiber"
+import {useGLTF} from "@react-three/drei"
 import './App.css'
+
+
+
+const Scene = ()=>{
+  const img = useGLTF("./planet.glb");
+
+
+  return(
+    <group>
+      <primitive scale={.15} rotation={[0,Math.PI * .55,0]}  position={[0,-1,0]} object={img.scene}/>
+    </group>
+  )
+}
 
 function App() {
   const [users,setUsers] = useState([])
   const [todos,setTodos] = useState([])
 
+ 
   useEffect(()=>{
     fetch('https://testmynodeappservice.azurewebsites.net/api/users')
     .then(res=>res.json())
@@ -23,6 +39,11 @@ function App() {
 
   return (
     <div className="app">
+      <Canvas style={{position:"absolute",height:'100%',width:"100%",background:"black",inset:0}}>
+        <pointLight intensity={2}/>
+      <ambientLight/>
+        <Scene/>
+      </Canvas>
      <h1>Mongoose CRUD App</h1>
      <h2>Total Users:{users.length}</h2>
      <h2>Todos:{todos.length}</h2>
